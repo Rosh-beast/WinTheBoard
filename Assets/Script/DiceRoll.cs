@@ -6,7 +6,7 @@ public class DiceRoll : MonoBehaviour
 {
     private Sprite[] diceSides;
     public SpriteRenderer rend;
-    private int whosTurn = 1;
+    public int whosTurn = 1;
     private bool isRolling = true;
     private void Start()
     {

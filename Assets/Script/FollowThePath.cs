@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
 
 public class FollowThePath : MonoBehaviour {
 
@@ -6,9 +8,11 @@ public class FollowThePath : MonoBehaviour {
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private Transform StartPos;
     [SerializeField] GameObject deathEffect;
+    [SerializeField] Image gifImage;
     [HideInInspector]
     public int waypointIndex = 0;
     public bool shouldMove = false;
+    DiceRoll roll;
 	private void Start () {
         transform.position = waypoints[waypointIndex].transform.position;
 	}
@@ -24,17 +28,19 @@ public class FollowThePath : MonoBehaviour {
         }
         else if(collision.gameObject.tag == "Gift")
         {
-            GiftGenerator();
+           StartCoroutine(GiftGenerator());
         }
         else if (collision.gameObject.tag == "Booster")
         {
-
+            Debug.Log("on booster");
+           // roll.whosTurn = 1;
         }
         else if (collision.gameObject.tag == "Die")
         {
             Debug.Log("on die");
             shouldMove = false;
-           deathEffect.SetActive(true);
+            deathEffect.SetActive(true);
+            Destroy(gameObject, 1f);
          //  Rebirth();
         }
     }
@@ -44,10 +50,13 @@ public class FollowThePath : MonoBehaviour {
         shouldMove = true;
         transform.position = StartPos.position;
     }
-    void GiftGenerator()
+    IEnumerator GiftGenerator()
     {
-
+        gifImage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        gifImage.gameObject.SetActive(false);
     }
+
     private void Move()
     {
         if (waypointIndex <= waypoints.Length - 1)
